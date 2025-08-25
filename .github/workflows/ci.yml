@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-bench:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -X utf8 -m pip install --upgrade pip
+          python -X utf8 -m pip install -r requirements.txt || true
+
+      - name: Quick 10-gen check
+        run: |
+          python -X utf8 winner/ten_generation_stress_test.py --aggregate-only --quiet
+
+      - name: Benchmarks (head-to-head)
+        run: |
+          python -X utf8 benchmark_compare.py || true
+          python -X utf8 write_bench_csv.py || true
+
+      - name: Upload bench summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench_summary
+          path: results/bench_summary.csv
+
