@@ -1,0 +1,286 @@
+{
+  "timestamp": "20250824_225822",
+  "test_type": "10_generation_stress_test",
+  "seeds_used": [
+    1756090702,
+    1756103047,
+    1756115392,
+    1756127737,
+    1756140082,
+    1756152427,
+    1756164772,
+    1756177117,
+    1756189462,
+    1756201807
+  ],
+  "detailed_results": [
+    {
+      "generation": 1,
+      "seed": 1756090702,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    },
+    {
+      "generation": 2,
+      "seed": 1756103047,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    },
+    {
+      "generation": 3,
+      "seed": 1756115392,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    },
+    {
+      "generation": 4,
+      "seed": 1756127737,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    },
+    {
+      "generation": 5,
+      "seed": 1756140082,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    },
+    {
+      "generation": 6,
+      "seed": 1756152427,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    },
+    {
+      "generation": 7,
+      "seed": 1756164772,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    },
+    {
+      "generation": 8,
+      "seed": 1756177117,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    },
+    {
+      "generation": 9,
+      "seed": 1756189462,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    },
+    {
+      "generation": 10,
+      "seed": 1756201807,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200
+    }
+  ],
+  "summary_stats": {
+    "math_avg": 100.0,
+    "logic_avg": 100.0,
+    "total_avg": 200.0,
+    "math_range": [
+      100,
+      100
+    ],
+    "logic_range": [
+      100,
+      100
+    ],
+    "total_range": [
+      200,
+      200
+    ],
+    "consistency_score": 100.0
+  }
+}

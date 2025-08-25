@@ -1,0 +1,5 @@
+system,avg_time_s_per_set,p50_time_s,p95_time_s,avg_score,size_mb
+Wave (Math),0.001402,0.001293,0.00138,100,0.42
+SymPy (Math),0.007744,0.007601,0.007953,100,65.43
+Wave (Logic Pos/Neg/MP/MT/DS/BL),0.001816,0.001781,0.001937,80,0.42
+Z3 (Logic Pos/Neg/MP/MT/DS/BL),0.025319,0.02443,0.024785,80,20.09
