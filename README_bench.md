@@ -5,7 +5,7 @@
 This repo ships `winner/` (the on-device wave-based symbolic engine) and lightweight benchmarks.
 
 ### Quick Results (on this machine)
-- 20k mixed math+logic: 0.6s total (100% accuracy), ~32.8k QPS
+- 20k mixed math+logic: 0.7s total (100% accuracy), ~29.2k QPS
 - Math (Wave vs SymPy): Wave ~5× faster, both 100%
 - Logic MP/MT/DS/Pos/Neg/BL (Wave vs Z3): Wave ~10–13× faster, both 100%
 - Footprint: `winner/` core ~114 KB; SymPy ~65 MB; Z3 (Python pkg) ~20 MB

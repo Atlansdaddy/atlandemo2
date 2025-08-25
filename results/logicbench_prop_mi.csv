@@ -1,0 +1,10 @@
+file,correct,total,pct,time_s
+LogicBench(Aug)\propositional_logic\bidirectional_dilemma\data_instances.json,288,600,48.000,0.021482
+LogicBench(Aug)\propositional_logic\commutation\data_instances.json,572,600,95.333,0.017738
+LogicBench(Aug)\propositional_logic\constructive_dillema\data_instances.json,521,604,86.258,0.019799
+LogicBench(Aug)\propositional_logic\destructive_dillema\data_instances.json,286,600,47.667,0.020258
+LogicBench(Aug)\propositional_logic\disjunctive_syllogism\data_instances.json,479,604,79.305,0.016256
+LogicBench(Aug)\propositional_logic\hypothetical_syllogism\data_instances.json,565,600,94.167,0.010982
+LogicBench(Aug)\propositional_logic\material_implication\data_instances.json,181,600,30.167,0.019239
+LogicBench(Aug)\propositional_logic\modus_tollens\data_instances.json,358,600,59.667,0.010908
+TOTAL,3250,4808,67.596,0.136663

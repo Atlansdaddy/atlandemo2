@@ -1,0 +1,10 @@
+file,correct,total,pct,time_s
+LogicBench(Aug)\nm_logic\default_reasoning_default\data_instances.json,223,300,74.333,0.005703
+LogicBench(Aug)\nm_logic\default_reasoning_irr\data_instances.json,151,300,50.333,0.006517
+LogicBench(Aug)\nm_logic\default_reasoning_open\data_instances.json,146,300,48.667,0.006375
+LogicBench(Aug)\nm_logic\default_reasoning_several\data_instances.json,228,600,38.000,0.012541
+LogicBench(Aug)\nm_logic\reasoning_about_exceptions_1\data_instances.json,181,600,30.167,0.013333
+LogicBench(Aug)\nm_logic\reasoning_about_exceptions_2\data_instances.json,72,300,24.000,0.005236
+LogicBench(Aug)\nm_logic\reasoning_about_exceptions_3\data_instances.json,148,300,49.333,0.005472
+LogicBench(Aug)\nm_logic\reasoning_about_priority\data_instances.json,300,600,50.000,0.012667
+TOTAL,1449,3300,43.909,0.067844

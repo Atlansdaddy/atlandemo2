@@ -1,0 +1,11 @@
+file,correct,total,pct,time_s
+LogicBench(Aug)\first_order_logic\bidirectional_dilemma\data_instances.json,315,600,52.500,0.009390
+LogicBench(Aug)\first_order_logic\constructive_dillema\data_instances.json,588,600,98.000,0.008505
+LogicBench(Aug)\first_order_logic\destructive_dillema\data_instances.json,297,600,49.500,0.011382
+LogicBench(Aug)\first_order_logic\disjunctive_syllogism\data_instances.json,162,600,27.000,0.007584
+LogicBench(Aug)\first_order_logic\existential_instantiation\data_instances.json,159,300,53.000,0.002433
+LogicBench(Aug)\first_order_logic\hypothetical_syllogism\data_instances.json,542,600,90.333,0.005632
+LogicBench(Aug)\first_order_logic\modus_ponens\data_instances.json,579,600,96.500,0.004513
+LogicBench(Aug)\first_order_logic\modus_tollens\data_instances.json,246,600,41.000,0.007197
+LogicBench(Aug)\first_order_logic\universal_instantiation\data_instances.json,296,300,98.667,0.002147
+TOTAL,3184,4800,66.333,0.058784

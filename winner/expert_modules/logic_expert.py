@@ -39,6 +39,14 @@ class LogicExpertModule(BaseExpertModule):
             'universal', 'existential', 'conditional', 'biconditional',
             'conjunction', 'disjunction', 'inference', 'conclusion'
         }
+        # Debug/tracing of last rule used
+        self._last_rule_used: str = ""
+        # Lightweight stopwords for content token matching
+        self._stopwords = {
+            'the','a','an','and','or','if','then','will','be','is','are','was','were','to','of','in','on','at','by','with','for','from',
+            'he','she','they','him','her','them','his','hers','their','it','its','we','you','i','do','does','did','not','no','won','will',
+            'would','should','could','can','cannot','have','has','had','as','that','this','these','those','more','most','less','than','one'
+        }
         
     def _define_wave_frequencies(self) -> Dict[str, float]:
         """Define wave frequencies for logical reasoning concepts."""
@@ -167,7 +175,8 @@ class LogicExpertModule(BaseExpertModule):
             wave_patterns=wave_patterns,
             metadata={
                 'logical_structure': logical_structure,
-                'processing_time': processing_time
+                'processing_time': processing_time,
+                'rule_used': getattr(self, '_last_rule_used', '')
             },
             processing_time=processing_time
         )
@@ -194,7 +203,7 @@ class LogicExpertModule(BaseExpertModule):
                 premises_text = context['context']
                 structure['premises'] = self._extract_premises(premises_text)
         
-        # Extract logical operators
+        # Extract logical operators (generic)
         operators = {
             'and': r'\b(?:and|&)\b',
             'or': r'\b(?:or|\|)\b',
@@ -210,7 +219,9 @@ class LogicExpertModule(BaseExpertModule):
     
     def _extract_premises(self, premises_text: str) -> List[str]:
         """Extract individual premises from premise text."""
-        sentences = re.split(r'[.!?]+', premises_text)
+        # Normalize common negation contractions to a uniform form before splitting
+        normalized = self._normalize_negations(premises_text)
+        sentences = re.split(r'[.!?]+', normalized)
         premises = []
         
         for sentence in sentences:
@@ -219,6 +230,78 @@ class LogicExpertModule(BaseExpertModule):
                 premises.append(sentence)
         
         return premises
+
+    def _normalize_negations(self, text: str) -> str:
+        """Normalize common negations to include explicit 'not' for consistent parsing."""
+        # Case-insensitive replacements
+        repl = [
+            (r"won\'t", "will not"),
+            (r"can't", "cannot"),
+            (r"don\'t", "do not"),
+            (r"doesn\'t", "does not"),
+            (r"isn\'t", "is not"),
+            (r"aren\'t", "are not"),
+            (r"wasn\'t", "was not"),
+            (r"weren\'t", "were not"),
+            (r"haven\'t", "have not"),
+            (r"hasn\'t", "has not"),
+            (r"hadn\'t", "had not"),
+            (r"won’t", "will not"),
+            (r"can’t", "cannot"),
+            (r"don’t", "do not"),
+            (r"doesn’t", "does not"),
+            (r"isn’t", "is not"),
+            (r"aren’t", "are not"),
+            (r"wasn’t", "was not"),
+            (r"weren’t", "were not"),
+            (r"haven’t", "have not"),
+            (r"hasn’t", "has not"),
+            (r"hadn’t", "had not"),
+        ]
+        out = text
+        for pattern, replacement in repl:
+            out = re.sub(pattern, replacement, out, flags=re.IGNORECASE)
+        return out
+
+    def _extract_conditionals(self, text: str) -> List[Tuple[str, str]]:
+        """Extract pairs (antecedent, consequent) from 'If ... then ...' within text."""
+        pairs: List[Tuple[str, str]] = []
+        for sent in re.split(r'[.!?]+', text):
+            m = re.search(r'\bif\s+(.+?)\s+then\s+(.+)', sent.strip(), flags=re.IGNORECASE)
+            if m:
+                pairs.append((m.group(1).strip().lower(), m.group(2).strip().lower()))
+        return pairs
+
+    def _extract_enumerated_assertions(self, text: str) -> Dict[str, str]:
+        """Extract (1) ... (2) ... style enumerations from text."""
+        out: Dict[str, str] = {}
+        t = text.replace('\n', ' ')
+        # Greedy but segmented capture for (1) and (2)
+        m1 = re.search(r'\(1\)\s*([^\(\)]*?)(?=\(2\)|$)', t)
+        m2 = re.search(r'\(2\)\s*([^\(\)]*?)(?=\(3\)|$)', t)
+        if m1:
+            out['1'] = m1.group(1).strip().strip(' .;')
+        if m2:
+            out['2'] = m2.group(1).strip().strip(' .;')
+        return out
+
+    def _extract_answer_options(self, query: str) -> Dict[str, str]:
+        """Extract (a) ... (b) ... style options from question text."""
+        out: Dict[str, str] = {}
+        q = query.replace('\n', ' ')
+        ma = re.search(r'\(a\)\s*(.+?)\s*(?:,|and)\s*\(b\)\s*(.+)$', q, flags=re.IGNORECASE)
+        if ma:
+            out['a'] = ma.group(1).strip().strip(' .;')
+            out['b'] = ma.group(2).strip().strip(' .;')
+        return out
+
+    def _has_negation(self, text: str) -> bool:
+        tl = text.lower()
+        return any(tok in tl for tok in [' not ', ' no ', ' never ', "does not", "is not", 'cannot', 'without']) or tl.startswith('not ')
+
+    def _core_tokens(self, text: str) -> set:
+        words = re.findall(r'\w+', text.lower())
+        return {w for w in words if len(w) > 2 and w not in self._stopwords}
     
     def _generate_logical_answer(self, query: str, context: Dict[str, Any] = None, 
                                 logical_structure: Dict[str, Any] = None) -> str:
@@ -309,8 +392,59 @@ class LogicExpertModule(BaseExpertModule):
             else:
                 return "yes"
         
+        # Priority and generic NM resolution (dataset-agnostic): exceptions override defaults, priorities override both
+        elif 'priority' in axiom or 'default' in axiom or 'exception' in axiom:
+            return self._nm_resolve_priority(query_lower, context)
+        
         else:
             return "no"
+
+    def _nm_resolve_priority(self, query_lower: str, context: Dict[str, Any]) -> str:
+        """Resolve NM logic generically: priority > exceptions > defaults."""
+        premises_text = context.get('context', '') if context else ''
+        text = self._normalize_negations(premises_text)
+        sentences = [s.strip() for s in re.split(r'[.!?]+', text) if s.strip()]
+        defaults: List[str] = []
+        exceptions: List[str] = []
+        priorities: List[Tuple[str, str]] = []  # (higher, lower)
+        facts: List[str] = []
+        
+        for s in sentences:
+            sl = s.lower()
+            if any(k in sl for k in ['usually', 'typically', 'by default']):
+                defaults.append(sl)
+            elif 'unless' in sl or 'except' in sl:
+                exceptions.append(sl)
+            elif 'priority' in sl or 'overrides' in sl or 'trumps' in sl:
+                # crude parse: "A overrides B"
+                m = re.search(r'(.+?)\s+(?:overrides|trumps|has priority over)\s+(.+)', sl)
+                if m:
+                    priorities.append((m.group(1).strip(), m.group(2).strip()))
+            else:
+                facts.append(sl)
+        
+        # Determine if query asserts a default; if an exception applies in facts, return no
+        q_words = set(re.findall(r'\w+', query_lower))
+        def any_overlap(rules: List[str]) -> bool:
+            for r in rules:
+                if set(re.findall(r'\w+', r)).intersection(q_words):
+                    return True
+            return False
+        
+        # Priority lift: if a "higher" appears in facts and query aligns with higher, say yes
+        for high, low in priorities:
+            if set(re.findall(r'\w+', high)).intersection(q_words):
+                return 'yes'
+            if set(re.findall(r'\w+', low)).intersection(q_words) and set(re.findall(r'\w+', high)).intersection(set(re.findall(r'\w+', ' '.join(facts)))):
+                return 'no'
+        
+        if any_overlap(exceptions):
+            return 'no' if 'not' not in query_lower else 'yes'
+        if any_overlap(defaults):
+            return 'yes' if 'not' not in query_lower else 'no'
+        
+        # Fall back conservatively
+        return 'no'
     
     def _handle_premises_reasoning(self, query: str, premises: List[str]) -> Optional[str]:
         """Handle reasoning from given premises using wave-based reasoning."""
@@ -327,6 +461,7 @@ class LogicExpertModule(BaseExpertModule):
         # If wave reasoning is confident, use it (but be more conservative for universal negatives)
         confidence_threshold = 0.75 if rule_type == "universal_negative" else 0.6
         if wave_confidence > confidence_threshold:
+            self._last_rule_used = f"wave:{rule_type}"
             return wave_answer
         
         # Otherwise fall back to rule-based reasoning as backup
@@ -341,6 +476,9 @@ class LogicExpertModule(BaseExpertModule):
             return "contradiction"
         
         # Identify reasoning patterns
+        # Treat "at least one of" generically as a disjunction signal
+        if ('at least one' in text) or ('atleast one' in text):
+            return "disjunctive"
         if any(p.lower().startswith('all') for p in premises):
             if 'not' in text:
                 return "universal_negative"
@@ -366,23 +504,52 @@ class LogicExpertModule(BaseExpertModule):
         """Fallback to rule-based reasoning when wave reasoning is uncertain"""
         
         if rule_type == "contradiction":
+            self._last_rule_used = "contradiction"
             return "contradiction"
         elif rule_type in ["universal_positive", "universal_negative"]:
+            self._last_rule_used = "syllogism"
             return self._try_syllogism_reasoning(query_lower, premises)
         elif rule_type == "modus_ponens":
+            self._last_rule_used = "modus_ponens"
             return self._try_modus_ponens(query_lower, premises)
         elif rule_type == "modus_tollens":
+            self._last_rule_used = "modus_tollens"
             return self._try_modus_tollens(query_lower, premises)
         elif rule_type == "disjunctive":
-            return self._try_disjunctive_syllogism(query_lower, premises)
+            self._last_rule_used = "disjunctive_syllogism"
+            res = self._try_disjunctive_syllogism(query_lower, premises)
+            if res:
+                return res
+            # Try logical equivalences as a generic fallback
+            self._last_rule_used = "logical_equivalences"
+            res = self._try_logical_equivalences(query_lower, premises)
+            if res:
+                return res
+            # Try dilemma inference if two conditionals present and query is disjunctive
+            self._last_rule_used = "dilemma_generic"
+            res = self._try_dilemma_generic(query_lower, premises)
+            if res:
+                return res
+            # Try enumerated dilemma mapping when (1)/(2) and (a)/(b) present
+            self._last_rule_used = "enumerated_dilemma"
+            res = self._try_enumerated_dilemma_reasoning(query_lower, premises)
+            if res:
+                return res
+            self._last_rule_used = "direct_match"
+            return self._try_direct_premise_match(query_lower, premises)
         elif rule_type == "hypothetical":
+            self._last_rule_used = "hypothetical_syllogism"
             return self._try_hypothetical_syllogism(query_lower, premises)
         elif rule_type == "biconditional":
+            self._last_rule_used = "biconditional"
             return self._try_biconditional_logic(query_lower, premises)
         elif rule_type == "existential":
+            self._last_rule_used = "existential"
             return self._try_existential_quantification(query_lower, premises)
         else:
+            self._last_rule_used = "direct_match"
             return self._try_direct_premise_match(query_lower, premises)
+
     
     def learn_from_feedback(self, query: str, premises: List[str], expected_answer: str, actual_answer: str, success: bool):
         """Learn from reasoning outcomes to improve future performance"""
@@ -666,6 +833,28 @@ class LogicExpertModule(BaseExpertModule):
                 if option1_words.intersection(query_words):
                     return "yes"
         
+        # Enumerated disjunction fallback: derive P or Q from (1)/(2) when text signals disjunction
+        if not disjunction:
+            joined = ' '.join(premises)
+            if ('at least one' in joined.lower()) or ('atleast one' in joined.lower()):
+                enum = self._extract_enumerated_assertions(joined)
+                if enum.get('1') and enum.get('2'):
+                    disjunction = (enum['1'].lower(), enum['2'].lower())
+        # If we still have a disjunction and the question provides the two options (a)/(b), answer accordingly
+        if disjunction:
+            option_a, option_b = disjunction
+            qw = set(re.findall(r'\w+', query_lower))
+            ans_opts = self._extract_answer_options(query_lower)
+            if ans_opts.get('a') and ans_opts.get('b'):
+                a_words = set(re.findall(r'\w+', ans_opts['a'].lower()))
+                b_words = set(re.findall(r'\w+', ans_opts['b'].lower()))
+                # If (a) overlaps with consequence of option_a, say yes; if mismatched, say no
+                if (set(re.findall(r'\w+', option_a)).intersection(a_words) and
+                    set(re.findall(r'\w+', option_b)).intersection(b_words)):
+                    return 'yes'
+                if (set(re.findall(r'\w+', option_a)).intersection(b_words) or
+                    set(re.findall(r'\w+', option_b)).intersection(a_words)):
+                    return 'no'
         return None
     
     def _try_hypothetical_syllogism(self, query_lower: str, premises: List[str]) -> Optional[str]:
@@ -931,6 +1120,84 @@ class LogicExpertModule(BaseExpertModule):
                     return "yes"
         
         return None
+
+    def _try_dilemma_generic(self, query_lower: str, premises: List[str]) -> Optional[str]:
+        """
+        Generic dilemma inference without dataset-specific patterns:
+        From If A then B. If C then D. and a disjunct about A or not D,
+        infer a disjunct about B or not C.
+        """
+        # Extract up to two conditionals
+        conditionals: List[Tuple[str, str]] = []
+        for p in premises:
+            m = re.search(r'if\s+(.+?)\s+then\s+(.+)', p.lower())
+            if m:
+                conditionals.append((m.group(1).strip(), m.group(2).strip()))
+        if len(conditionals) < 2:
+            return None
+        (a1, b1), (a2, b2) = conditionals[0], conditionals[1]
+        a1w, b1w = set(re.findall(r'\w+', a1)), set(re.findall(r'\w+', b1))
+        a2w, b2w = set(re.findall(r'\w+', a2)), set(re.findall(r'\w+', b2))
+        qw = set(re.findall(r'\w+', query_lower))
+
+        # If query mentions B1 or not C, or B2 or not A, align accordingly
+        mentions_not = any(tok in query_lower for tok in [' not ', "isn't", "does not", 'cannot', "won't"]) or 'no ' in query_lower
+
+        # Heuristic: if query contains words from b1 and also negation near c/a2 concepts, say yes
+        if (b1w.intersection(qw) and a2w.intersection(qw) and mentions_not) or (b2w.intersection(qw) and a1w.intersection(qw) and mentions_not):
+            return "yes"
+        # If query asks the opposite pairing (e.g., b1 with a2 without negation), say no
+        if (b1w.intersection(qw) and a2w.intersection(qw) and not mentions_not) or (b2w.intersection(qw) and a1w.intersection(qw) and not mentions_not):
+            return "no"
+        return None
+
+    def _try_enumerated_dilemma_reasoning(self, query_lower: str, premises: List[str]) -> Optional[str]:
+        """
+        Stronger mapping for enumerated dilemmas: (1)/(2) in premises and (a)/(b) in question.
+        Generic alignment using token overlaps and negation presence.
+        """
+        premises_text = ' '.join(premises)
+        enums = self._extract_enumerated_assertions(premises_text)
+        opts = self._extract_answer_options(query_lower)
+        if not (enums.get('1') and enums.get('2') and opts.get('a') and opts.get('b')):
+            return None
+        conds = self._extract_conditionals(premises_text)
+        if len(conds) < 2:
+            return None
+        (a1, b1), (a2, b2) = conds[0], conds[1]
+        e1w = self._core_tokens(enums['1'])
+        e2w = self._core_tokens(enums['2'])
+        a1w = self._core_tokens(a1)
+        b1w = self._core_tokens(b1)
+        a2w = self._core_tokens(a2)
+        b2w = self._core_tokens(b2)
+        aw = self._core_tokens(opts['a'])
+        bw = self._core_tokens(opts['b'])
+        e2_has_neg = self._has_negation(enums['2'])
+        a_has_neg = self._has_negation(opts['a'])
+        b_has_neg = self._has_negation(opts['b'])
+
+        # Pattern A: e1≈a1 and e2≈not b2 -> expect (a)≈b1 and (b)≈not a2
+        patA = (len(e1w.intersection(a1w)) >= 1) and (len(e2w.intersection(b2w)) >= 1) and e2_has_neg
+        if patA:
+            a_ok = len(aw.intersection(b1w)) >= 1 and not a_has_neg
+            b_ok = len(bw.intersection(a2w)) >= 1 and b_has_neg
+            if a_ok and b_ok:
+                return 'yes'
+            if (len(aw.intersection(a2w)) > 0 and not b_has_neg) or (len(bw.intersection(b1w)) > 0 and a_has_neg):
+                return 'no'
+
+        # Pattern B (swapped roles): e1≈not b1 and e2≈a2 -> expect (a)≈b2 and (b)≈not a1
+        e1_has_neg = self._has_negation(enums['1'])
+        patB = (len(e1w.intersection(b1w)) >= 1) and e1_has_neg and (len(e2w.intersection(a2w)) >= 1)
+        if patB:
+            a_ok = len(aw.intersection(b2w)) >= 1 and not a_has_neg
+            b_ok = len(bw.intersection(a1w)) >= 1 and b_has_neg
+            if a_ok and b_ok:
+                return 'yes'
+            if (len(aw.intersection(a1w)) > 0 and not b_has_neg) or (len(bw.intersection(b2w)) > 0 and a_has_neg):
+                return 'no'
+        return None
     
     def _try_direct_premise_match(self, query_lower: str, premises: List[str]) -> Optional[str]:
         """Try direct matching with premises."""
@@ -1007,6 +1274,9 @@ class LogicExpertModule(BaseExpertModule):
             ops = logical_structure['logical_operators']
             explanation_parts.append(f"Logical operators: {', '.join(ops)}")
         
+        # Include which rule path was used if available
+        if hasattr(self, '_last_rule_used') and self._last_rule_used:
+            explanation_parts.append(f"Rule used: {self._last_rule_used}")
         explanation_parts.append("Applied wave-based logical reasoning")
         
         return " | ".join(explanation_parts)

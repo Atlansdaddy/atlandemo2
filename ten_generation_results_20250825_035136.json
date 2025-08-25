@@ -1,0 +1,320 @@
+{
+  "timestamp": "20250825_035136",
+  "test_type": "10_generation_stress_test",
+  "seeds_used": [
+    1756108296,
+    1756120641,
+    1756132986,
+    1756145331,
+    1756157676,
+    1756170021,
+    1756182366,
+    1756194711,
+    1756207056,
+    1756219401
+  ],
+  "detailed_results": [
+    {
+      "generation": 1,
+      "seed": 1756108296,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.005231000017374754
+      }
+    },
+    {
+      "generation": 2,
+      "seed": 1756120641,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.005675800028257072
+      }
+    },
+    {
+      "generation": 3,
+      "seed": 1756132986,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.005474100005812943
+      }
+    },
+    {
+      "generation": 4,
+      "seed": 1756145331,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.00520050001796335
+      }
+    },
+    {
+      "generation": 5,
+      "seed": 1756157676,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.005009299959056079
+      }
+    },
+    {
+      "generation": 6,
+      "seed": 1756170021,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.00513669999781996
+      }
+    },
+    {
+      "generation": 7,
+      "seed": 1756182366,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.00547579990234226
+      }
+    },
+    {
+      "generation": 8,
+      "seed": 1756194711,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.005116799962706864
+      }
+    },
+    {
+      "generation": 9,
+      "seed": 1756207056,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.005374000058509409
+      }
+    },
+    {
+      "generation": 10,
+      "seed": 1756219401,
+      "math_scores": {
+        "order": 25,
+        "percent": 25,
+        "arithmetic": 25,
+        "squares": 15,
+        "stats": 10
+      },
+      "logic_scores": {
+        "pos_syl": 15,
+        "neg_syl": 15,
+        "mp": 15,
+        "mt": 15,
+        "ds": 10,
+        "hs": 10,
+        "bl": 10,
+        "eq": 5,
+        "cd": 5
+      },
+      "total_math": 100,
+      "total_logic": 100,
+      "total_score": 200,
+      "timing": {
+        "generation_seconds": 0.005002700025215745
+      }
+    }
+  ],
+  "summary_stats": {
+    "math_avg": 100.0,
+    "logic_avg": 100.0,
+    "total_avg": 200.0,
+    "math_range": [
+      100,
+      100
+    ],
+    "logic_range": [
+      100,
+      100
+    ],
+    "total_range": [
+      200,
+      200
+    ],
+    "consistency_score": 100.0
+  },
+  "timing": {
+    "total_seconds": 0.05958080000709742
+  },
+  "code_hash": "56a0fe091680528a2d3daf5408fe2d1a0cd1956e65b121a6f199d974e31f5ea3"
+}
